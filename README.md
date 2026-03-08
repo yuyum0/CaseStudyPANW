@@ -1,4 +1,4 @@
-# SkillSync
+# SkillSync (Option 2 for Case Challenge)
 
 AI-assisted career navigation platform that helps early-career technical candidates understand the gap between their current skills and the requirements of a target technical role.
 
