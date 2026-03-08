@@ -41,6 +41,11 @@ export async function POST(request: Request) {
   const matchedSkills = extractedSkills.filter((s) => roleSkills.some((r) => r.toLowerCase() === s.toLowerCase()));
   const missingSkills = roleSkills.filter((s) => !extractedSkills.some((e) => e.toLowerCase() === s.toLowerCase()));
 
+  // #region agent log
+  const rawVal = process.env.OPENAI_API_KEY;
+  fetch('http://127.0.0.1:7518/ingest/ce71aede-daeb-4d2f-b8af-f3a7e794442b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'39d146'},body:JSON.stringify({sessionId:'39d146',location:'app/api/analyze/route.ts',message:'OPENAI_API_KEY env check',data:{hasKey:!!rawVal,keyLength:rawVal?.length??0,keyTrimmedLength:rawVal?.trim().length??0,cwd:process.cwd(),openaiRelatedKeys:Object.keys(process.env).filter(k=>k.includes('OPENAI'))},timestamp:Date.now(),hypothesisId:'A_B_C_D'})}).catch(()=>{});
+  // #endregion
+
   const apiKey = process.env.OPENAI_API_KEY?.trim();
   const aiResult = apiKey && (await generateWithAI(targetRole, extractedSkills, missingSkills, apiKey));
 
