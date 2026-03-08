@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { AnalysisResult } from "@/lib/types";
+import VisualRoadmap from "@/components/VisualRoadmap";
 
 type FilterCategory = "all" | "projects" | "learning" | "certifications" | "interview prep";
 
@@ -72,14 +73,7 @@ export default function AnalysisResults({ result }: AnalysisResultsProps) {
         </div>
       </section>
 
-      <section>
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-blue-800 mb-2">Prioritized roadmap</h3>
-        <ol className="list-decimal list-inside space-y-1 rounded-lg border border-blue-200 bg-white p-4 text-sm text-slate-800">
-          {result.roadmap.map((step, i) => (
-            <li key={i} className="leading-relaxed">{step}</li>
-          ))}
-        </ol>
-      </section>
+      <VisualRoadmap result={result} />
 
       <section>
         <h3 className="text-sm font-semibold uppercase tracking-wide text-blue-800 mb-2">Filter recommendations</h3>
@@ -99,7 +93,14 @@ export default function AnalysisResults({ result }: AnalysisResultsProps) {
           <div className="mt-4 rounded-lg border border-blue-200 bg-white p-4">
             <h4 className="text-sm font-medium text-slate-700 mb-2">Project recommendations</h4>
             <ul className="list-disc list-inside space-y-1 text-sm text-slate-800">
-              {filteredRecommendations.projects.map((p, i) => <li key={i}>{p}</li>)}
+              {filteredRecommendations.projects.map((p, i) => (
+                <li key={i}>
+                  {typeof p === "string" ? p : p.name}
+                  {typeof p === "object" && p.takeaway && (
+                    <span className="block pl-4 text-xs text-slate-600">— {p.takeaway}</span>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
         )}
@@ -107,7 +108,14 @@ export default function AnalysisResults({ result }: AnalysisResultsProps) {
           <div className="mt-4 rounded-lg border border-blue-200 bg-white p-4">
             <h4 className="text-sm font-medium text-slate-700 mb-2">Learning & certifications</h4>
             <ul className="list-disc list-inside space-y-1 text-sm text-slate-800">
-              {filteredRecommendations.learning.map((l, i) => <li key={i}>{l}</li>)}
+              {filteredRecommendations.learning.map((l, i) => (
+                <li key={i}>
+                  {typeof l === "string" ? l : l.name}
+                  {typeof l === "object" && l.howToFindOrUse && (
+                    <span className="block pl-4 text-xs text-slate-600">— {l.howToFindOrUse}</span>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
         )}
