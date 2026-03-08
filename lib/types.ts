@@ -34,6 +34,10 @@ export interface AnalysisResult {
   /** Learning/certs (rich or legacy string list) */
   learningRecommendations: string[] | LearningRecommendation[];
   interviewQuestions: string[];
+  /** Fit score 0–10 for the target role (rule-based or AI). */
+  score: number;
+  /** Personalized feedback on how far the candidate is from being a fit (AI only). */
+  personalizedFeedback?: string;
   usedFallback: boolean;
   fallbackReason?: "api_key_missing" | "api_error";
 }

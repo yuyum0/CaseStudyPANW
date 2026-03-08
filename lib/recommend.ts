@@ -5,13 +5,14 @@ import type {
   RoadmapStep,
 } from "./types";
 
-const SYSTEM_PROMPT = `You are a career advisor for early-career technical candidates. Given a target role, the candidate's extracted skills, and missing skills for that role, respond with a JSON object only (no markdown, no code fence) with these exact keys:
+const SYSTEM_PROMPT = `You are a senior resume reviewer and technical recruiter at a big tech company (e.g. FAANG). You evaluate candidate profiles for fit against specific engineering roles. Given a target role, the role's required and preferred skills, and the candidate's parsed resume/profile data, respond with a JSON object only (no markdown, no code fence) with these exact keys:
 
-- roadmapSteps: array of 4-6 ordered steps. Each step is an object with:
-  - step: short label (e.g. "Assess your gap")
+- roadmapSteps: array of 4-6 ordered steps personalized to this candidate's profile. Each step is an object with:
+  - step: short label (e.g. "Build foundation in Docker")
   - goal: what the user achieves at this step (one sentence)
   - howItHelps: how this step moves them toward the role (1 sentence)
   - takeaway: one concrete, actionable takeaway the user can use immediately
+  Tailor each step to their specific gaps and experience—reference their missing skills by name and make takeaways specific to their situation.
 
 - projects: array of exactly 3 concrete project ideas. Each is an object with:
   - name: project title or idea (e.g. "Build a REST API for a task manager")
@@ -24,6 +25,10 @@ const SYSTEM_PROMPT = `You are a career advisor for early-career technical candi
   - howToFindOrUse: 1-2 sentences on where to find it and how to use it (e.g. "Free on AWS Skill Builder; take the practice exam before the paid certification.")
 
 - interviewQuestions: array of exactly 5 mock interview questions (strings), specific to the target role.
+
+- score: a number from 0 to 10 representing your assessment of how likely this candidate would succeed in the target role at a big tech company. Act as a recruiter: evaluate their resume/profile holistically—skills alignment, experience depth, project relevance, and gaps. 0 = would not advance past resume screen; 10 = strong hire signal, likely to succeed. Be rigorous but fair.
+
+- personalizedFeedback: a string of 2–3 sentences written as a recruiter giving feedback after reviewing their resume. Compare their profile to the role requirements. Mention specific strengths, critical gaps, and your honest assessment of where they stand (e.g. "close to interview-ready", "significant ground to cover"). Be encouraging but direct.
 
 Be practical and specific. For howToFindOrUse, name real platforms (Coursera, Udemy, official docs, YouTube) when relevant. Keep each field concise but useful.`;
 
@@ -60,14 +65,21 @@ function normalizeLearning(raw: unknown): LearningRecommendation | null {
 
 export async function generateWithAI(
   targetRole: string,
+  profileText: string,
+  githubSummary: string | undefined,
   extractedSkills: string[],
   missingSkills: string[],
+  requiredSkills: string[],
+  preferredSkills: string[],
   apiKey: string
-): Promise<Omit<AnalysisResult, "extractedSkills" | "matchedSkills" | "missingSkills" | "targetRole" | "usedFallback"> | null> {
+): Promise<Omit<AnalysisResult, "extractedSkills" | "matchedSkills" | "missingSkills" | "targetRole" | "usedFallback" | "score"> & { score?: number } | null> {
   try {
     const { default: OpenAI } = await import("openai");
     const openai = new OpenAI({ apiKey });
-    const userContent = `Target role: ${targetRole}. Extracted skills: ${extractedSkills.join(", ") || "None"}. Missing skills for this role: ${missingSkills.join(", ") || "None"}.`;
+    const roleContext = `Required skills: ${requiredSkills.join(", ") || "None"}. Preferred skills: ${preferredSkills.join(", ") || "None"}.`;
+    const candidateContext = `Resume/profile:\n${profileText}${githubSummary ? `\n\nGitHub summary:\n${githubSummary}` : ""}`;
+    const parsedContext = `Skills we parsed from their profile: ${extractedSkills.join(", ") || "None"}. Skills missing for this role: ${missingSkills.join(", ") || "None"}.`;
+    const userContent = `You are evaluating a candidate for the role of ${targetRole}.\n\n${roleContext}\n\n${candidateContext}\n\n${parsedContext}\n\nReview their resume as a big tech recruiter. Compare their profile to the role requirements and assess how likely they would succeed in this role. Provide your score (0-10) and personalized feedback.`;
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
@@ -84,6 +96,8 @@ export async function generateWithAI(
       projects?: unknown[];
       learningRecommendations?: unknown[];
       interviewQuestions?: string[];
+      score?: number;
+      personalizedFeedback?: string;
     };
 
     const roadmapSteps = Array.isArray(parsed.roadmapSteps)
@@ -97,6 +111,9 @@ export async function generateWithAI(
       ? parsed.learningRecommendations.map(normalizeLearning).filter((l): l is LearningRecommendation => l !== null).slice(0, 3)
       : [];
     const interviewQuestions = Array.isArray(parsed.interviewQuestions) ? parsed.interviewQuestions.slice(0, 5) : [];
+    const rawScore = typeof parsed.score === "number" ? parsed.score : undefined;
+    const score = rawScore !== undefined ? Math.min(10, Math.max(0, Math.round(rawScore * 10) / 10)) : undefined;
+    const personalizedFeedback = typeof parsed.personalizedFeedback === "string" ? parsed.personalizedFeedback.trim() || undefined : undefined;
 
     return {
       roadmap,
@@ -104,6 +121,8 @@ export async function generateWithAI(
       projects,
       learningRecommendations,
       interviewQuestions,
+      score,
+      personalizedFeedback,
     };
   } catch (err) {
     console.error("OpenAI recommendation failed:", err);

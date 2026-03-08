@@ -6,7 +6,11 @@
       "requiredSkills": ["HTML", "CSS", "JavaScript", "React", "TypeScript", "REST APIs"],
       "preferredSkills": ["Next.js", "State Management", "Testing", "Accessibility", "Build Tools"],
       "commonCertifications": ["Meta Front-End Developer", "freeCodeCamp Responsive Web Design"],
-      "suggestedProjects": ["Build a responsive portfolio with dark mode", "Create a real-time dashboard with charts", "Implement a multi-step form with validation"],
+      "suggestedProjects": [
+        "Build a responsive portfolio with dark mode",
+        "Create a real-time dashboard with charts",
+        "Implement a multi-step form with validation"
+      ],
       "interviewTopics": ["Component lifecycle", "Virtual DOM", "State vs props", "Performance optimization", "CSS layout"]
     },
     {
@@ -15,7 +19,11 @@
       "requiredSkills": ["Python", "SQL", "REST APIs", "Git", "Linux basics"],
       "preferredSkills": ["Node.js", "Databases", "Caching", "Message Queues", "Docker"],
       "commonCertifications": ["AWS Certified Developer", "MongoDB Certified Associate"],
-      "suggestedProjects": ["Design a REST API for a task manager", "Build a rate-limited notification service", "Implement auth with JWT and refresh tokens"],
+      "suggestedProjects": [
+        "Design a REST API for a task manager",
+        "Build a rate-limited notification service",
+        "Implement auth with JWT and refresh tokens"
+      ],
       "interviewTopics": ["Database indexing", "API design", "Concurrency", "Security", "Scaling"]
     },
     {
@@ -24,16 +32,25 @@
       "requiredSkills": ["Python", "SQL", "Machine Learning", "Data preprocessing", "Statistics"],
       "preferredSkills": ["TensorFlow", "PyTorch", "Feature Engineering", "Model Deployment", "MLOps"],
       "commonCertifications": ["Google ML Engineer", "AWS Machine Learning Specialty"],
-      "suggestedProjects": ["Train a classifier on a public dataset", "Build a simple recommendation system", "Deploy a model behind a REST API"],
+      "suggestedProjects": [
+        "Train a classifier on a public dataset",
+        "Build a simple recommendation system",
+        "Deploy a model behind a REST API"
+      ],
       "interviewTopics": ["Overfitting", "Bias-variance", "Feature selection", "Evaluation metrics", "Model serving"]
     },
     {
       "id": "cloud-engineer",
       "name": "Cloud Engineer",
       "requiredSkills": ["Linux", "Networking", "Scripting", "CI/CD", "Containers"],
-      "preferredSkills": ["AWS", "Terraform", "Kubernetes", "Monitoring", "Security best practices"],
+      "preferredSkills": ["AWS", "Azure", "Terraform", "Kubernetes", "Monitoring", "Security best practices"],
       "commonCertifications": ["AWS Solutions Architect", "HashiCorp Terraform Associate"],
-      "suggestedProjects": ["Deploy a web app with IaC (Terraform or CloudFormation)", "Set up a CI/CD pipeline for a sample repo", "Build a multi-region failover demo"],
+      "suggestedProjects": [
+        "Deploy a web app with IaC (Terraform or CloudFormation)",
+        "Set up a CI/CD pipeline for a sample repo",
+        "Build a multi-region failover demo",
+        "Build a full-stack messaging app using Firebase, and WebSockets."
+      ],
       "interviewTopics": ["Networking (VPC, subnets)", "IAM", "High availability", "Cost optimization", "Containers vs VMs"]
     }
   ]
