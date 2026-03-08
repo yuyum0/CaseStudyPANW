@@ -1,0 +1,7 @@
+{
+  "profiles": [
+    { "id": "recent-grad", "label": "Recent Graduate", "resume": "Alex Chen\nComputer Science, State University, May 2024\n\nSkills: Python, Java, SQL, Git. Completed coursework in data structures, algorithms, and databases. Capstone project: built a REST API for a campus event scheduler using FastAPI and PostgreSQL.", "githubSummary": "Pinned: campus-event-api (FastAPI, PostgreSQL), algo-practice (Python)." },
+    { "id": "career-switcher", "label": "Career Switcher", "resume": "Jordan Lee\nTransitioning from Data Analyst to Software Engineering. Daily use: Python (pandas, numpy), SQL, Excel, Tableau. Self-studying: JavaScript, React, HTML/CSS via freeCodeCamp.", "githubSummary": "Repos: react-todo-app, portfolio-2024, sql-snippets." },
+    { "id": "mentee-example", "label": "Mentee Example", "resume": "Sam Rivera\nFirst-year CS student. Completed: Intro to Programming (Python), Intro to Web (HTML/CSS/JS). Personal projects: calculator app in JS, simple CLI quiz in Python.", "githubSummary": "Beginner repos: python-quiz-cli, js-calculator." }
+  ]
+}
