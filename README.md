@@ -10,7 +10,7 @@ The goal is to convert an ambiguous career goal into a **concrete, actionable de
 
 # Demo
 
-Link
+Link: https://youtu.be/zy2CTxpafXs
 
 ---
 
