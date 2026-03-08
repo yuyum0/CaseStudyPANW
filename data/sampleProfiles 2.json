@@ -1,0 +1,22 @@
+{
+  "profiles": [
+    {
+      "id": "recent-grad",
+      "label": "Recent Graduate",
+      "resume": "Alex Chen\nComputer Science, State University, May 2024\n\nSkills: Python, Java, SQL, Git. Completed coursework in data structures, algorithms, and databases. Capstone project: built a REST API for a campus event scheduler using FastAPI and PostgreSQL. Internship at a local startup: wrote ETL scripts and unit tests. Familiar with Linux and basic Docker.\n\nEducation: B.S. Computer Science, GPA 3.6. Relevant courses: Software Engineering, Database Systems, Web Development.",
+      "githubSummary": "Pinned: campus-event-api (FastAPI, PostgreSQL), algo-practice (Python). Contributed to one open-source docs fix. Mostly academic and personal projects."
+    },
+    {
+      "id": "career-switcher",
+      "label": "Career Switcher",
+      "resume": "Jordan Lee\nTransitioning from Data Analyst to Software Engineering\n\nCurrent role: Data Analyst at FinCorp (2 years). Daily use: Python (pandas, numpy), SQL, Excel, Tableau. Built dashboards and automated reports. Some scripting for data pipelines. Self-studying: JavaScript, React, HTML/CSS via freeCodeCamp and Udemy. Side project: small React todo app and a static portfolio site.\n\nPrevious: Biology degree, lab work. Strong problem-solving and communication. Looking for frontend or full-stack roles.",
+      "githubSummary": "Repos: react-todo-app, portfolio-2024, sql-snippets, python-scripts. Learning in public; recent focus on React and TypeScript."
+    },
+    {
+      "id": "mentee-example",
+      "label": "Mentee Example",
+      "resume": "Sam Rivera\nFirst-year CS student, Community College. Expected transfer to four-year program in 2025.\n\nCompleted: Intro to Programming (Python), Intro to Web (HTML/CSS/JS). Currently taking: Data Structures. Personal projects: calculator app in JS, simple CLI quiz in Python. Interested in cloud and backend roles. No professional experience yet. Active in CS club and hackathons.\n\nGoals: land an internship in the next 12 months, build portfolio with 2–3 solid projects.",
+      "githubSummary": "Beginner repos: python-quiz-cli, js-calculator, first-website. Learning Git and good commit habits."
+    }
+  ]
+}

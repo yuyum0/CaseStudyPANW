@@ -46,10 +46,16 @@ export async function POST(request: Request) {
   fetch('http://127.0.0.1:7518/ingest/ce71aede-daeb-4d2f-b8af-f3a7e794442b',{method:'POST',headers:{'Content-Type':'application/json','X-Debug-Session-Id':'39d146'},body:JSON.stringify({sessionId:'39d146',location:'app/api/analyze/route.ts',message:'OPENAI_API_KEY env check',data:{hasKey:!!rawVal,keyLength:rawVal?.length??0,keyTrimmedLength:rawVal?.trim().length??0,cwd:process.cwd(),openaiRelatedKeys:Object.keys(process.env).filter(k=>k.includes('OPENAI'))},timestamp:Date.now(),hypothesisId:'A_B_C_D'})}).catch(()=>{});
   // #endregion
 
+  const ruleBasedScore =
+    roleSkills.length > 0
+      ? Math.min(10, Math.max(0, Math.round((matchedSkills.length / roleSkills.length) * 10 * 10) / 10))
+      : 0;
+
   const apiKey = process.env.OPENAI_API_KEY?.trim();
   const aiResult = apiKey && (await generateWithAI(targetRole, extractedSkills, missingSkills, apiKey));
 
   if (aiResult) {
+    const score = aiResult.score !== undefined ? aiResult.score : ruleBasedScore;
     return NextResponse.json({
       targetRole,
       extractedSkills,
@@ -60,6 +66,8 @@ export async function POST(request: Request) {
       projects: aiResult.projects,
       learningRecommendations: aiResult.learningRecommendations,
       interviewQuestions: aiResult.interviewQuestions,
+      score,
+      personalizedFeedback: aiResult.personalizedFeedback,
       usedFallback: false,
     });
   }

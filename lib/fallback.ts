@@ -167,6 +167,12 @@ function buildFallbackResult(
     interviewQuestions.push("Describe a technical challenge you solved recently.", "How do you approach learning a new technology?");
   }
 
+  const totalRoleSkills = role ? role.requiredSkills.length + role.preferredSkills.length : 0;
+  const score =
+    totalRoleSkills > 0
+      ? Math.min(10, Math.max(0, Math.round((matched.length / totalRoleSkills) * 10 * 10) / 10))
+      : 0;
+
   return {
     targetRole,
     extractedSkills: extracted,
@@ -177,6 +183,7 @@ function buildFallbackResult(
     projects: uniqueProjects,
     learningRecommendations: uniqueLearning,
     interviewQuestions: interviewQuestions.slice(0, 5),
+    score,
     usedFallback: true,
   };
 }

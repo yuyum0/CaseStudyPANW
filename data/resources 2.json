@@ -1,0 +1,94 @@
+{
+  "skillResources": [
+    {
+      "skill": "Python",
+      "projects": ["CLI tool with argparse", "REST API with FastAPI", "Data pipeline script"],
+      "courses": ["Python for Everybody (Coursera)", "Real Python"],
+      "certifications": ["PCPP (Python Institute)"],
+      "interviewTopics": ["Data structures", "Decorators", "Async", "Testing"],
+      "difficulty": "beginner",
+      "estimatedEffort": "2-4 weeks"
+    },
+    {
+      "skill": "React",
+      "projects": ["Todo app with hooks", "Dashboard with charts", "Form wizard with validation"],
+      "courses": ["React – The Complete Guide (Udemy)", "Epic React (Kent C. Dodds)"],
+      "certifications": ["Meta Front-End Developer Professional Certificate"],
+      "interviewTopics": ["Hooks", "Virtual DOM", "State management", "Performance"],
+      "difficulty": "beginner",
+      "estimatedEffort": "3-6 weeks"
+    },
+    {
+      "skill": "SQL",
+      "projects": ["Schema design for e-commerce", "Analytics queries", "Reporting views"],
+      "courses": ["SQL for Data Science (Coursera)", "Mode Analytics SQL Tutorial"],
+      "certifications": ["Google Data Analytics Certificate"],
+      "interviewTopics": ["Joins", "Indexes", "Query optimization", "Normalization"],
+      "difficulty": "beginner",
+      "estimatedEffort": "2-3 weeks"
+    },
+    {
+      "skill": "Machine Learning",
+      "projects": ["Classification on UCI dataset", "Recommendation system", "Time series forecast"],
+      "courses": ["Machine Learning (Coursera)", "Fast.ai Practical Deep Learning"],
+      "certifications": ["Google ML Engineer Certification"],
+      "interviewTopics": ["Bias-variance", "Cross-validation", "Metrics", "Feature engineering"],
+      "difficulty": "intermediate",
+      "estimatedEffort": "2-3 months"
+    },
+    {
+      "skill": "Docker",
+      "projects": ["Containerize a web app", "Multi-stage build", "Docker Compose stack"],
+      "courses": ["Docker Mastery (Udemy)", "Docker docs"],
+      "certifications": ["Docker Certified Associate"],
+      "interviewTopics": ["Images vs containers", "Networking", "Volumes", "Security"],
+      "difficulty": "beginner",
+      "estimatedEffort": "1-2 weeks"
+    },
+    {
+      "skill": "AWS",
+      "projects": ["Static site on S3 + CloudFront", "Lambda function", "VPC with public/private subnets"],
+      "courses": ["AWS Cloud Practitioner Essentials", "A Cloud Guru"],
+      "certifications": ["AWS Solutions Architect Associate", "AWS Developer Associate"],
+      "interviewTopics": ["IAM", "EC2", "S3", "Networking", "Cost"],
+      "difficulty": "intermediate",
+      "estimatedEffort": "1-2 months"
+    },
+    {
+      "skill": "TypeScript",
+      "projects": ["Typed API client", "React app with strict types", "CLI with TypeScript"],
+      "courses": ["TypeScript Handbook", "Total TypeScript"],
+      "certifications": [],
+      "interviewTopics": ["Types vs interfaces", "Generics", "Utility types"],
+      "difficulty": "beginner",
+      "estimatedEffort": "1-2 weeks"
+    },
+    {
+      "skill": "REST APIs",
+      "projects": ["CRUD API", "Pagination and filtering", "API with OpenAPI spec"],
+      "courses": ["REST API Design (Pluralsight)", "API design guides"],
+      "certifications": [],
+      "interviewTopics": ["HTTP methods", "Status codes", "Idempotency", "Versioning"],
+      "difficulty": "beginner",
+      "estimatedEffort": "2-3 weeks"
+    },
+    {
+      "skill": "Feature Engineering",
+      "projects": ["Feature store for a model", "Pipeline for categorical encoding", "Time-based features"],
+      "courses": ["Feature Engineering for ML (Coursera)", "Applied ML course"],
+      "certifications": ["Google ML Engineer"],
+      "interviewTopics": ["Encoding", "Scaling", "Missing values", "Feature selection"],
+      "difficulty": "intermediate",
+      "estimatedEffort": "3-4 weeks"
+    },
+    {
+      "skill": "Model Deployment",
+      "projects": ["Model behind FastAPI", "Dockerized model service", "A/B test endpoint"],
+      "courses": ["Full Stack ML (Udacity)", "MLOps fundamentals"],
+      "certifications": ["Google ML Engineer"],
+      "interviewTopics": ["Serving patterns", "Latency", "Monitoring", "Versioning"],
+      "difficulty": "intermediate",
+      "estimatedEffort": "2-4 weeks"
+    }
+  ]
+}

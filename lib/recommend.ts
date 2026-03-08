@@ -25,6 +25,10 @@ const SYSTEM_PROMPT = `You are a career advisor for early-career technical candi
 
 - interviewQuestions: array of exactly 5 mock interview questions (strings), specific to the target role.
 
+- score: a number from 0 to 10 indicating how well the candidate's current profile fits the typical requirements of the target role (0 = no fit, 10 = strong fit). Base this on matched vs missing skills and relevance of their experience.
+
+- personalizedFeedback: a string of 2–3 sentences giving personalized feedback on how far the candidate is from being a fit for the typical role. Mention specific gaps or strengths, and whether they are close, midway, or have significant ground to cover. Be encouraging but honest.
+
 Be practical and specific. For howToFindOrUse, name real platforms (Coursera, Udemy, official docs, YouTube) when relevant. Keep each field concise but useful.`;
 
 function normalizeRoadmapStep(raw: unknown): RoadmapStep | null {
@@ -63,7 +67,7 @@ export async function generateWithAI(
   extractedSkills: string[],
   missingSkills: string[],
   apiKey: string
-): Promise<Omit<AnalysisResult, "extractedSkills" | "matchedSkills" | "missingSkills" | "targetRole" | "usedFallback"> | null> {
+): Promise<Omit<AnalysisResult, "extractedSkills" | "matchedSkills" | "missingSkills" | "targetRole" | "usedFallback" | "score"> & { score?: number } | null> {
   try {
     const { default: OpenAI } = await import("openai");
     const openai = new OpenAI({ apiKey });
@@ -84,6 +88,8 @@ export async function generateWithAI(
       projects?: unknown[];
       learningRecommendations?: unknown[];
       interviewQuestions?: string[];
+      score?: number;
+      personalizedFeedback?: string;
     };
 
     const roadmapSteps = Array.isArray(parsed.roadmapSteps)
@@ -97,6 +103,9 @@ export async function generateWithAI(
       ? parsed.learningRecommendations.map(normalizeLearning).filter((l): l is LearningRecommendation => l !== null).slice(0, 3)
       : [];
     const interviewQuestions = Array.isArray(parsed.interviewQuestions) ? parsed.interviewQuestions.slice(0, 5) : [];
+    const rawScore = typeof parsed.score === "number" ? parsed.score : undefined;
+    const score = rawScore !== undefined ? Math.min(10, Math.max(0, Math.round(rawScore * 10) / 10)) : undefined;
+    const personalizedFeedback = typeof parsed.personalizedFeedback === "string" ? parsed.personalizedFeedback.trim() || undefined : undefined;
 
     return {
       roadmap,
@@ -104,6 +113,8 @@ export async function generateWithAI(
       projects,
       learningRecommendations,
       interviewQuestions,
+      score,
+      personalizedFeedback,
     };
   } catch (err) {
     console.error("OpenAI recommendation failed:", err);

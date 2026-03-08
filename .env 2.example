@@ -1,0 +1,2 @@
+# OpenAI API key for AI-powered recommendations (optional; fallback used if missing)
+OPENAI_API_KEY=
