@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { checkRateLimit } from "@/lib/rateLimit";
 import { extractSkillsFromProfile } from "@/lib/parser";
 import { runFallback } from "@/lib/fallback";
 import { generateWithAI } from "@/lib/recommend";
@@ -19,6 +20,9 @@ const AnalyzeSchema = z.object({
 });
 
 export async function POST(request: Request) {
+  const rateLimitResponse = checkRateLimit(request, { maxRequests: 10, windowMs: 60 * 1000 });
+  if (rateLimitResponse) return rateLimitResponse;
+
   let body: unknown;
   try {
     body = await request.json();

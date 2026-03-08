@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
+import { checkRateLimit } from "@/lib/rateLimit";
 
 const MAX_FILE_BYTES = 5 * 1024 * 1024;
 
 export async function POST(request: Request) {
+  const rateLimitResponse = checkRateLimit(request, { maxRequests: 15, windowMs: 60 * 1000 });
+  if (rateLimitResponse) return rateLimitResponse;
+
   let formData: FormData;
   try {
     formData = await request.formData();
