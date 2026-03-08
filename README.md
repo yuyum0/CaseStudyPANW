@@ -10,17 +10,27 @@ The goal is to convert an ambiguous career goal into a **concrete, actionable de
 
 # Demo
 
-(To be added)
+Link
 
-Include a 5–7 minute walkthrough video demonstrating:
+---
 
-1. Resume/profile analysis
-2. Job description parsing
-3. Skill gap identification
-4. AI roadmap generation
-5. Fallback logic
-6. Dashboard visualization
+# Quick Start
 
+1. `npm install`
+2. Copy `.env.example` to `.env.local` and set `OPENAI_API_KEY` if you want AI recommendations.
+3. `npm run dev` then open http://localhost:3000
+
+## Run Commands
+
+- `npm run dev` – Start Next.js dev server
+- `npm run build` – Production build
+- `npm run start` – Start production server
+- `npm run lint` – Run ESLint
+
+## Test Commands
+
+- `npm test` – Run Vitest once
+- `npm run test:watch` – Run Vitest in watch mode
 ---
 
 # Scenario Chosen
@@ -39,13 +49,14 @@ Target audiences include:
 
 # Problem Statement
 
-Early-career candidates often struggle to understand what skills are actually required to obtain a specific technical role.
+Students and early-career professionals often find a "skills gap" between
+their academic knowledge and the specific technical requirements of job postings. Navigating multiple job boards and certification sites makes it difficult to see a clear path from their current skill set to their "dream role."
 
 Common issues include:
 
 | Challenge | Impact |
 |---|---|
-| Unclear skill requirements | Candidates don't know what to learn next |
+| Unclear skill requirements for jobs | Candidates don't know what to learn next |
 | Generic career advice | Recommendations lack relevance |
 | Difficulty interpreting job descriptions | Hard to translate job listings into actionable skills |
 | Fragmented learning resources | Courses and certifications are scattered |
@@ -72,9 +83,9 @@ Outputs include:
 
 - skill gap analysis
 - prioritized learning roadmap
-- recommended projects
+- recommended projects to implement
 - learning or certification suggestions
-- mock interview questions
+- mock interview questions for specific roles
 
 ---
 
@@ -135,19 +146,6 @@ The system extracts skills such as:
 - SQL
 - React
 - Docker
-
----
-
-## Job Description Analysis
-
-Users may paste a job description.
-
-Example parsed requirements:
-
-- Feature Engineering
-- Model Deployment
-- AWS
-- Experiment Tracking
 
 ---
 
@@ -285,25 +283,6 @@ export type SkillAnalysis = {
 };
 ```
 
----
-
-# Quick Start
-
-1. `npm install`
-2. Copy `.env.example` to `.env.local` and set `OPENAI_API_KEY` if you want AI recommendations.
-3. `npm run dev` then open http://localhost:3000
-
-## Run Commands
-
-- `npm run dev` – Start Next.js dev server
-- `npm run build` – Production build
-- `npm run start` – Start production server
-- `npm run lint` – Run ESLint
-
-## Test Commands
-
-- `npm test` – Run Vitest once
-- `npm run test:watch` – Run Vitest in watch mode
 
 ## AI Disclosure
 
