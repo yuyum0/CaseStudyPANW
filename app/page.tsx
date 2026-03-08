@@ -41,7 +41,7 @@ export default function Home() {
     <main className="mx-auto max-w-3xl px-4 py-8 sm:py-12">
       <header className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-blue-900 sm:text-4xl">SkillSync</h1>
-        <p className="mt-2 text-blue-800/80">Career navigation for early-career technical candidates</p>
+        <p className="mt-2 text-blue-800/80">Develop Those Missing Skills for Your Next Job Now!</p>
       </header>
       <section className="mb-10 rounded-xl border border-blue-200 bg-white p-6 shadow-sm">
         <h2 className="mb-4 text-lg font-semibold text-blue-900">Your profile and target role</h2>

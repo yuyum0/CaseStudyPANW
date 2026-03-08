@@ -2,13 +2,15 @@ import { POST } from "@/app/api/analyze/route";
 
 describe("POST /api/analyze", () => {
   it("happy path: valid profile and role returns extracted and missing skills", async () => {
+    const body = {
+      profileText:
+        "Computer Science graduate. Skills: Python, SQL, Git, REST APIs. Built a FastAPI project.",
+      targetRole: "Backend Engineer",
+    };
     const req = new Request("http://localhost/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        profileText: "Computer Science graduate. Skills: Python, SQL, Git, REST APIs. Built a FastAPI project.",
-        targetRole: "Backend Engineer",
-      }),
+      body: JSON.stringify(body),
     });
     const res = await POST(req);
     expect(res.status).toBe(200);
@@ -18,9 +20,15 @@ describe("POST /api/analyze", () => {
     expect(data).toHaveProperty("missingSkills");
     expect(data).toHaveProperty("targetRole", "Backend Engineer");
     expect(Array.isArray(data.extractedSkills)).toBe(true);
+    expect(Array.isArray(data.matchedSkills)).toBe(true);
+    expect(Array.isArray(data.missingSkills)).toBe(true);
     expect(data.extractedSkills).toContain("Python");
     expect(data.extractedSkills).toContain("SQL");
+    expect(data.matchedSkills.length).toBeGreaterThan(0);
     expect(data).toHaveProperty("roadmap");
+    expect(data).toHaveProperty("projects");
+    expect(data).toHaveProperty("learningRecommendations");
+    expect(data).toHaveProperty("interviewQuestions");
     expect(data).toHaveProperty("usedFallback");
   });
 
@@ -28,7 +36,10 @@ describe("POST /api/analyze", () => {
     const req = new Request("http://localhost/api/analyze", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ profileText: "", targetRole: "Frontend Engineer" }),
+      body: JSON.stringify({
+        profileText: "",
+        targetRole: "Frontend Engineer",
+      }),
     });
     const res = await POST(req);
     expect(res.status).toBe(400);
