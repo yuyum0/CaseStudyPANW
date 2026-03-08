@@ -31,6 +31,33 @@ Link
 
 - `npm test` – Run Vitest once
 - `npm run test:watch` – Run Vitest in watch mode
+
+## Testing
+
+Tests are written with **Vitest** and live in `__tests__/`. There are two suites:
+
+### Types of tests
+
+| Type | File | What it tests |
+|------|------|----------------|
+| **Unit** | `parser.test.ts` | The `extractSkillsFromProfile` function in isolation—no API, no mocks. |
+| **Integration** | `analyze.test.ts` | The full `POST /api/analyze` route: request → validation → parsing → recommendation (AI or fallback) → response. The route handler is invoked directly with a `Request` object. |
+
+- **Unit test:** One function, controlled input, assert on output. Fast and easy to reason about.
+- **Integration test:** The real API path runs end-to-end (Zod validation, parser, role lookup, fallback when no API key). No server is started; we call the exported `POST` with a fake `Request`. When `OPENAI_API_KEY` is unset (e.g. in CI), the fallback path runs, so tests are deterministic and free of API calls.
+
+### What each suite covers
+
+**`parser.test.ts`**
+- **Happy path:** Profile text that mentions known skills (e.g. Python, SQL, React, Git) → parser returns those skills.
+- **Edge case:** Empty profile string → parser returns an empty array.
+
+**`analyze.test.ts`**
+- **Happy path:** Valid `profileText` and `targetRole` → 200 response with `extractedSkills`, `matchedSkills`, `missingSkills`, `roadmap`, `projects`, `learningRecommendations`, `interviewQuestions`, and `usedFallback`. Asserts that expected skills appear and the response shape is complete.
+- **Edge case:** Empty `profileText` (invalid input) → 400 response with an `error` message. This exercises **Zod validation**: the schema requires non-empty profile text, so the API rejects the request and returns a clear error instead of proceeding.
+
+See [Tradeoffs.md](./Tradeoffs.md) for design decisions, limitations of the rules-based fallback, and future directions (vector DBs, security).
+
 ---
 
 # Scenario Chosen
