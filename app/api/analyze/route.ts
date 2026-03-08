@@ -56,6 +56,7 @@ export async function POST(request: Request) {
       matchedSkills,
       missingSkills,
       roadmap: aiResult.roadmap,
+      roadmapSteps: aiResult.roadmapSteps,
       projects: aiResult.projects,
       learningRecommendations: aiResult.learningRecommendations,
       interviewQuestions: aiResult.interviewQuestions,

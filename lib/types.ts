@@ -1,11 +1,38 @@
+/** Single roadmap step with goal, how it helps, and a concrete takeaway */
+export interface RoadmapStep {
+  step: string;
+  goal: string;
+  howItHelps: string;
+  takeaway: string;
+}
+
+/** Project idea with takeaway and how to find/use it (1-2 sentences) */
+export interface ProjectRecommendation {
+  name: string;
+  takeaway: string;
+  howToFindOrUse: string;
+}
+
+/** Course/cert with takeaway and how to find/use it (1-2 sentences) */
+export interface LearningRecommendation {
+  name: string;
+  takeaway: string;
+  howToFindOrUse: string;
+}
+
 export interface AnalysisResult {
   targetRole: string;
   extractedSkills: string[];
   matchedSkills: string[];
   missingSkills: string[];
+  /** Legacy flat steps; used when roadmapSteps is absent (e.g. old fallback) */
   roadmap: string[];
-  projects: string[];
-  learningRecommendations: string[];
+  /** Rich roadmap steps (goal, how, takeaway). When present, prefer over roadmap. */
+  roadmapSteps?: RoadmapStep[];
+  /** Project ideas (rich: name, takeaway, howToFindOrUse) or legacy string list */
+  projects: string[] | ProjectRecommendation[];
+  /** Learning/certs (rich or legacy string list) */
+  learningRecommendations: string[] | LearningRecommendation[];
   interviewQuestions: string[];
   usedFallback: boolean;
   fallbackReason?: "api_key_missing" | "api_error";

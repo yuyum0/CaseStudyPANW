@@ -1,4 +1,11 @@
-import type { AnalysisResult, RoleDefinition, SkillResource } from "./types";
+import type {
+  AnalysisResult,
+  LearningRecommendation,
+  ProjectRecommendation,
+  RoleDefinition,
+  RoadmapStep,
+  SkillResource,
+} from "./types";
 import { extractSkillsFromProfile } from "./parser";
 
 interface RolesData {
@@ -39,28 +46,119 @@ function buildFallbackResult(
   resourcesData: ResourcesData,
   role?: RoleDefinition
 ): AnalysisResult {
-  const roadmap: string[] = [];
+  const roadmapSteps: RoadmapStep[] = [];
   if (missing.length > 0) {
-    roadmap.push(`Focus on filling gaps for ${targetRole}.`);
-    missing.slice(0, 5).forEach((s, i) => roadmap.push(`${i + 1}. Build foundation in ${s}`));
-    roadmap.push("Then practice with projects and mock interviews.");
+    roadmapSteps.push({
+      step: "Assess your gap",
+      goal: "Know exactly which skills you need to build for this role.",
+      howItHelps: "Comparing your profile to the role highlights missing competencies so you can prioritize.",
+      takeaway: `Focus on these ${missing.length} areas first: ${missing.slice(0, 3).join(", ")}${missing.length > 3 ? " and more." : "."}`,
+    });
+    missing.slice(0, 3).forEach((s) => {
+      roadmapSteps.push({
+        step: `Build foundation in ${s}`,
+        goal: `Gain practical ability in ${s}.`,
+        howItHelps: `This skill is required or preferred for ${targetRole}; building it strengthens your profile.`,
+        takeaway: `Use courses and a small project (see recommendations below) to learn and apply ${s}.`,
+      });
+    });
+    roadmapSteps.push({
+      step: "Learn and build in parallel",
+      goal: "Combine learning with hands-on projects.",
+      howItHelps: "Taking a course while doing a side project reinforces skills and gives you portfolio evidence.",
+      takeaway: "Pick one course and one project from the recommendations; do the course modules and apply them in the project.",
+    });
+    roadmapSteps.push({
+      step: "Practice for interviews",
+      goal: "Get ready to discuss your skills and projects.",
+      howItHelps: "Mock questions below are aligned to this role so you can practice clear, structured answers.",
+      takeaway: "Answer each question out loud and tie your answers to projects or learning you completed.",
+    });
   } else {
-    roadmap.push("Your skills align well. Deepen expertise and add portfolio projects.");
+    roadmapSteps.push(
+      {
+        step: "Deepen expertise",
+        goal: "Strengthen your existing skills and add portfolio proof.",
+        howItHelps: "Your skills already align; adding projects and certs makes you more competitive.",
+        takeaway: "Use the project and learning recommendations below to build 1–2 strong portfolio pieces.",
+      },
+      {
+        step: "Practice for interviews",
+        goal: "Prepare to discuss your experience.",
+        howItHelps: "Role-specific mock questions help you articulate what you know.",
+        takeaway: "Practice the interview questions below and link answers to your projects.",
+      }
+    );
   }
-  const projects: string[] = role?.suggestedProjects ? [...role.suggestedProjects] : [];
-  for (const skill of missing.slice(0, 3)) {
+  const roadmap = roadmapSteps.map((s) => s.step);
+
+  const projects: ProjectRecommendation[] = [];
+  const seen = new Set<string>();
+  if (role?.suggestedProjects?.length) {
+    role.suggestedProjects.slice(0, 3).forEach((p) => {
+      if (!seen.has(p)) {
+        seen.add(p);
+        projects.push({
+          name: p,
+          takeaway: "Demonstrates skills relevant to this role; good for your portfolio.",
+          howToFindOrUse: "Search for tutorials or starter repos by project name; build incrementally and document your approach in the README.",
+        });
+      }
+    });
+  }
+  for (const skill of missing) {
+    if (projects.length >= 3) break;
     const res = resourcesData.skillResources.find((r) => r.skill.toLowerCase() === skill.toLowerCase());
-    if (res?.projects?.length) projects.push(res.projects[0]);
+    const name = res?.projects?.[0];
+    if (name && !seen.has(name)) {
+      seen.add(name);
+      projects.push({
+        name,
+        takeaway: `Builds hands-on experience in ${skill}.`,
+        howToFindOrUse: "Look up the project idea on GitHub or YouTube; follow a short tutorial then extend it on your own.",
+      });
+    }
   }
-  const uniqueProjects = Array.from(new Set(projects)).slice(0, 3);
-  const learningRecommendations: string[] = [];
-  if (role?.commonCertifications?.length) learningRecommendations.push(...role.commonCertifications.slice(0, 2));
-  for (const skill of missing.slice(0, 2)) {
+  const uniqueProjects = projects.slice(0, 3);
+
+  const learningRecommendations: LearningRecommendation[] = [];
+  const seenL = new Set<string>();
+  if (role?.commonCertifications?.length) {
+    role.commonCertifications.slice(0, 2).forEach((c) => {
+      if (!seenL.has(c)) {
+        seenL.add(c);
+        learningRecommendations.push({
+          name: c,
+          takeaway: "Adds a recognized credential for this role.",
+          howToFindOrUse: "Search the certification name to find the official provider (e.g. Coursera, AWS Training); many offer free audit or trial.",
+        });
+      }
+    });
+  }
+  for (const skill of missing) {
+    if (learningRecommendations.length >= 3) break;
     const res = resourcesData.skillResources.find((r) => r.skill.toLowerCase() === skill.toLowerCase());
-    if (res?.courses?.length) learningRecommendations.push(res.courses[0]);
-    if (res?.certifications?.length) learningRecommendations.push(res.certifications[0]);
+    const course = res?.courses?.[0];
+    if (course && !seenL.has(course)) {
+      seenL.add(course);
+      learningRecommendations.push({
+        name: course,
+        takeaway: `Structured learning for ${skill}.`,
+        howToFindOrUse: "Search on Coursera, Udemy, or edX; use free audit where available, or check the provider’s official site.",
+      });
+    }
+    const cert = res?.certifications?.[0];
+    if (cert && !seenL.has(cert) && learningRecommendations.length < 3) {
+      seenL.add(cert);
+      learningRecommendations.push({
+        name: cert,
+        takeaway: `Validates ${skill} knowledge.`,
+        howToFindOrUse: "Find the official certification page; take practice exams first, then schedule the proctored exam when ready.",
+      });
+    }
   }
-  const uniqueLearning = Array.from(new Set(learningRecommendations)).slice(0, 3);
+  const uniqueLearning = learningRecommendations.slice(0, 3);
+
   const interviewQuestions: string[] = [];
   if (role?.interviewTopics?.length) {
     role.interviewTopics.slice(0, 5).forEach((t) => interviewQuestions.push(`Explain ${t} and how you've applied it.`));
@@ -68,12 +166,14 @@ function buildFallbackResult(
   if (interviewQuestions.length < 5) {
     interviewQuestions.push("Describe a technical challenge you solved recently.", "How do you approach learning a new technology?");
   }
+
   return {
     targetRole,
     extractedSkills: extracted,
     matchedSkills: matched,
     missingSkills: missing,
     roadmap,
+    roadmapSteps,
     projects: uniqueProjects,
     learningRecommendations: uniqueLearning,
     interviewQuestions: interviewQuestions.slice(0, 5),

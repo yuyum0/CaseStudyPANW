@@ -2,8 +2,9 @@
 
 import { useMemo, useState } from "react";
 import type { AnalysisResult } from "@/lib/types";
+import VisualRoadmap from "@/components/VisualRoadmap";
 
-type FilterCategory = "all" | "projects" | "learning" | "certifications" | "interview prep";
+type FilterCategory = "all" | "projects" | "learning" | "interview prep";
 
 interface AnalysisResultsProps {
   result: AnalysisResult | null;
@@ -17,7 +18,7 @@ export default function AnalysisResults({ result }: AnalysisResultsProps) {
     const { projects, learningRecommendations, interviewQuestions } = result;
     if (filter === "all") return { projects, learning: learningRecommendations, questions: interviewQuestions };
     if (filter === "projects") return { projects, learning: [], questions: [] };
-    if (filter === "learning" || filter === "certifications") return { projects: [], learning: learningRecommendations, questions: [] };
+    if (filter === "learning") return { projects: [], learning: learningRecommendations, questions: [] };
     if (filter === "interview prep") return { projects: [], learning: [], questions: interviewQuestions };
     return { projects, learning: learningRecommendations, questions: interviewQuestions };
   }, [result, filter]);
@@ -27,8 +28,7 @@ export default function AnalysisResults({ result }: AnalysisResultsProps) {
   const categories: { value: FilterCategory; label: string }[] = [
     { value: "all", label: "All" },
     { value: "projects", label: "Projects" },
-    { value: "learning", label: "Learning" },
-    { value: "certifications", label: "Certifications" },
+    { value: "learning", label: "Learning & certifications" },
     { value: "interview prep", label: "Interview prep" },
   ];
 
@@ -72,14 +72,7 @@ export default function AnalysisResults({ result }: AnalysisResultsProps) {
         </div>
       </section>
 
-      <section>
-        <h3 className="text-sm font-semibold uppercase tracking-wide text-blue-800 mb-2">Prioritized roadmap</h3>
-        <ol className="list-decimal list-inside space-y-1 rounded-lg border border-blue-200 bg-white p-4 text-sm text-slate-800">
-          {result.roadmap.map((step, i) => (
-            <li key={i} className="leading-relaxed">{step}</li>
-          ))}
-        </ol>
-      </section>
+      <VisualRoadmap result={result} />
 
       <section>
         <h3 className="text-sm font-semibold uppercase tracking-wide text-blue-800 mb-2">Filter recommendations</h3>
@@ -99,15 +92,29 @@ export default function AnalysisResults({ result }: AnalysisResultsProps) {
           <div className="mt-4 rounded-lg border border-blue-200 bg-white p-4">
             <h4 className="text-sm font-medium text-slate-700 mb-2">Project recommendations</h4>
             <ul className="list-disc list-inside space-y-1 text-sm text-slate-800">
-              {filteredRecommendations.projects.map((p, i) => <li key={i}>{p}</li>)}
+              {filteredRecommendations.projects.map((p, i) => (
+                <li key={i}>
+                  {typeof p === "string" ? p : p.name}
+                  {typeof p === "object" && p.takeaway && (
+                    <span className="block pl-4 text-xs text-slate-600">— {p.takeaway}</span>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
         )}
-        {(filter === "all" || filter === "learning" || filter === "certifications") && filteredRecommendations.learning.length > 0 && (
+        {(filter === "all" || filter === "learning") && filteredRecommendations.learning.length > 0 && (
           <div className="mt-4 rounded-lg border border-blue-200 bg-white p-4">
             <h4 className="text-sm font-medium text-slate-700 mb-2">Learning & certifications</h4>
             <ul className="list-disc list-inside space-y-1 text-sm text-slate-800">
-              {filteredRecommendations.learning.map((l, i) => <li key={i}>{l}</li>)}
+              {filteredRecommendations.learning.map((l, i) => (
+                <li key={i}>
+                  {typeof l === "string" ? l : l.name}
+                  {typeof l === "object" && l.howToFindOrUse && (
+                    <span className="block pl-4 text-xs text-slate-600">— {l.howToFindOrUse}</span>
+                  )}
+                </li>
+              ))}
             </ul>
           </div>
         )}
